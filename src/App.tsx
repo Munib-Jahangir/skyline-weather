@@ -74,7 +74,13 @@ function AppContent() {
 
       <Navbar />
 
-      <footer className="w-full py-8 text-center text-white/40 text-[10px] font-bold tracking-[0.3em] uppercase relative z-10 mb-20">
+      <footer
+        className="w-full py-8 text-center text-white/40 text-[10px] font-bold tracking-[0.3em] uppercase relative z-10 mb-20 cursor-pointer"
+        onClick={() => {
+          console.log("Skyline Weather - Developed by Munib Jahangir [Easter Egg]");
+          alert("Made by Munib Jahangir");
+        }}
+      >
         Skyline Weather • 2026 Edition
       </footer>
     </div>
