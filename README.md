@@ -34,33 +34,17 @@ Skyline Weather is a modern, high-performance weather application built with **R
 
 ## 📸 Screenshots
 
-<table border="0">
-  <tr>
-    <td width="50%">
-      <img src="images/main.png" alt="Home Screen">
-      <p align="center"><em>Main Dashboard</em></p>
-    </td>
-    <td width="50%">
-      <img src="images/about.png" alt="About Screen">
-      <p align="center"><em>About & Connect</em></p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <img src="images/setting.png" alt="Settings">
-      <p align="center"><em>Configuration</em></p>
-    </td>
-    <td width="50%">
-      <img src="images/splash.png" alt="Splash Screen">
-      <p align="center"><em>Premium Splash</em></p>
-    </td>
-  </tr>
-</table>
+### 📱 Mobile Experience
+<p align="center">
+  <img src="images/splash.png" width="22%" alt="Splash Screen">
+  <img src="images/main.png" width="22%" alt="Home Screen">
+  <img src="images/about.png" width="22%" alt="About Screen">
+  <img src="images/setting.png" width="22%" alt="Settings Screen">
+</p>
 
+### 💻 Desktop Experience
 <p align="center">
   <img src="images/desktop.png" width="100%" alt="Desktop View">
-  <br>
-  <em>Desktop Experience</em>
 </p>
 
 ---
