@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Info, Github, Twitter, Globe, Heart } from 'lucide-react';
+import { Info, Github, Youtube, Globe, Heart } from 'lucide-react';
 
 export const AboutPage: React.FC = () => {
   return (
@@ -23,10 +23,10 @@ export const AboutPage: React.FC = () => {
 
         <div className="space-y-6 text-white/80 leading-relaxed">
           <p>
-            Skyline is a premium weather experience designed for those who appreciate both accuracy and aesthetics. 
-            We believe that checking the weather shouldn't just be functional—it should be a moment of delight.
+            Skyline is a premium weather experience designed for those who appreciate both accuracy and aesthetics.
+            Detailed weather insights coupled with a stunning interface make checking the forecast a moment of delight.
           </p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
             <div className="p-6 rounded-3xl bg-white/5 border border-white/10">
               <h3 className="text-white font-bold mb-2">Real-time Data</h3>
@@ -40,18 +40,33 @@ export const AboutPage: React.FC = () => {
 
           <div className="pt-8 border-t border-white/10 flex flex-col items-center gap-6">
             <div className="flex gap-4">
-              <button className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors">
+              <a
+                href="https://github.com/Munib-Jahangir/skyline-weather"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors text-white"
+              >
                 <Github className="w-5 h-5" />
-              </button>
-              <button className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors">
-                <Twitter className="w-5 h-5" />
-              </button>
-              <button className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors">
+              </a>
+              <a
+                href="https://www.youtube.com/@MunibJahangirDev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors text-white"
+              >
+                <Youtube className="w-5 h-5" />
+              </a>
+              <a
+                href="https://skyline-weather-self.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors text-white"
+              >
                 <Globe className="w-5 h-5" />
-              </button>
+              </a>
             </div>
             <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/40">
-              Made with <Heart className="w-3 h-3 text-red-400 fill-red-400" /> by Skyline Team
+              Made with <Heart className="w-3 h-3 text-red-400 fill-red-400" /> by Munib Jahangir
             </p>
           </div>
         </div>

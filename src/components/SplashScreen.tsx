@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { SplashScreen as CapSplashScreen } from '@capacitor/splash-screen';
 
 export const SplashScreen: React.FC = () => {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShow(false), 3000); // Slightly longer for better view
+    // Hide native splash screen as soon as our JS splash mounts
+    const hideNativeSplash = async () => {
+      try {
+        await CapSplashScreen.hide();
+      } catch (e) {
+        console.warn('Capacitor SplashScreen not available');
+      }
+    };
+
+    hideNativeSplash();
+
+    const timer = setTimeout(() => setShow(false), 3500);
     return () => clearTimeout(timer);
   }, []);
 
