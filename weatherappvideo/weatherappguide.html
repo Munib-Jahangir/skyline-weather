@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyline Weather - Developer Resource Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.3);
+            --bg-dark: #070b14;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --glass: rgba(15, 23, 42, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background Elements */
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .bg-glow-1 {
+            top: -10%;
+            right: -10%;
+        }
+
+        .bg-glow-2 {
+            bottom: -10%;
+            left: -10%;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 5rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .logo-container {
+            width: 100px;
+            height: 100px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 6rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header i {
+            color: var(--primary);
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Cards & Prompts */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .prompt-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 0.8rem;
+            padding: 0.6rem 1.2rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+            background: #7dd3fc;
+        }
+
+        .copy-btn.copied {
+            background: #10b981;
+            color: #fff;
+        }
+
+        /* Guide List */
+        .guide-list {
+            list-style: none;
+        }
+
+        .guide-step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 1.5rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-num {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .step-content code {
+            display: block;
+            background: #000;
+            padding: 1rem;
+            border-radius: 0.8rem;
+            margin-top: 0.8rem;
+            color: var(--primary);
+        }
+
+        /* Tags */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 0;
+            border-top: 1px solid var(--card-border);
+            margin-top: 4rem;
+            color: var(--text-dim);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--card-border);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .prompt-box {
+                padding: 1.5rem;
+                padding-top: 4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <i data-lucide="cloud-lightning" size="48" color="#38bdf8"></i>
+            </div>
+            <h1>Developer <span style="-webkit-text-fill-color: var(--primary);">Vault</span></h1>
+            <p class="subtitle">Complete resource guide, prompts, and setup instructions for your Skyline Weather
+                Project.</p>
+            <div style="margin-top: 2rem;">
+                <a href="favicon.png" download="Skyline_Logo.png" class="copy-btn"
+                    style="position: static; display: inline-flex; text-decoration: none; padding: 1rem 2rem; border-radius: 1.5rem;">
+                    <i data-lucide="download" size="20"></i> Download App Logo (512x512)
+                </a>
+            </div>
+        </header>
+
+        <!-- Prompts Section -->
+        <section id="prompts">
+            <div class="section-header">
+                <i data-lucide="sparkles"></i>
+                <h2>AI Assistance Prompts</h2>
+            </div>
+
+            <div class="card" style="margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">1. SEO & Premium UI Prompt</h3>
+                        <p style="color: var(--text-dim);">Use this to transform your basic app into a premium product.
+                        </p>
+                    </div>
+                </div>
+                <div class="prompt-box" id="prompt-1">
+                    "Redesign the current application with a high-end, premium aesthetic. Use a modern glassmorphism
+                    design system with deep gradients (Indigo/Sky Blue), vibrant accent colors, and smooth
+                    micro-animations using Framer Motion. Ensure the typography uses modern Google Fonts like 'Inter' or
+                    'Outfit'.
+
+                    Additionally, implement full SEO best practices:
+                    - Add dynamic Meta Titles and Descriptions for all pages.
+                    - Ensure proper Semantic HTML structure (H1 per page, proper sectioning).
+                    - Optimize all images with proper Alt tags.
+                    - Create a clean, responsive Header and Footer that looks stunning on both Desktop and Mobile."
+                    <button class="copy-btn" onclick="copyText('prompt-1', this)">
+                        <i data-lucide="copy" size="16"></i> Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">2. Web to Mobile Conversion</h3>
+                    <p style="color: var(--text-dim);">The ultimate prompt for Capacitor conversion and Android setup.
+                    </p>
+                </div>
+                <div class="prompt-box" id="prompt-2">
+                    "Convert this web application into a fully functional native Mobile App using Capacitor.
+
+                    Steps to follow:
+                    1. Initialize Capacitor in the project with the App Name 'Skyline Weather' and Package ID
+                    'com.yourname.appname'.
+                    2. Add the Android platform and sync the web build (dist/out folder) to the native project.
+                    3. Automated Asset Generation: Use the provided logo to generate all required Android icons
+                    (Adaptive Icons) and a professional Splash Screen.
+                    4. Permissions: Add necessary Android permissions (Internet, Fine Location, Coarse Location) to the
+                    AndroidManifest.xml.
+                    5. Interactive Features: Add a hidden Easter Egg in the footer that displays 'Made by [Your Name]'
+                    when clicked.
+                    6. Build: Configure the Gradle environment and provide the command to generate a debug APK."
+                    <button class="copy-btn" onclick="copyText('prompt-2', this)">
+                        <i data-lucide="copy" size="16"></i> Copy
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architect Instructions -->
+        <section id="architect">
+            <div class="section-header">
+                <i data-lucide="terminal"></i>
+                <h2>Architect Instructions</h2>
+            </div>
+            <div class="card">
+                <p style="font-weight: 600; color: var(--primary); margin-bottom: 1rem;">Senior Frontend Architect
+                    Persona</p>
+                <div class="prompt-box" id="prompt-architect" style="white-space: pre-wrap; word-break: break-word;">
+                    Instruction for AI / Developer:
+                    “Act as a senior frontend architect with 10+ years experience building SaaS dashboards.”
+
+                    Build a premium, production-ready Weather Application using:
+
+                    React (with Vite)
+
+                    TypeScript
+
+                    Tailwind CSS
+
+                    Functional components only
+
+                    Clean scalable folder architecture
+
+                    Modern 2026 UI/UX patterns
+
+                    🎨 DESIGN REQUIREMENTS
+
+                    Theme:
+
+                    Primary color: Sky Blue (#38BDF8 / Tailwind sky-400/500)
+
+                    Background: Gradient sky blue → light cyan
+
+                    Glassmorphism UI cards with:
+
+                    backdrop-blur-xl
+
+                    bg-white/10
+
+                    border border-white/20
+
+                    shadow-xl
+
+                    rounded-3xl
+
+                    p-6
+
+                    transition-all duration-300 hover:scale-[1.02]
+
+                    Smooth transitions
+
+                    Soft glow hover effects
+
+                    Clean modern icons (Lucide React)
+
+                    UI Feel:
+
+                    iOS-level premium
+
+                    Minimal & spacious
+
+                    No clutter
+
+                    Mobile-first responsive
+
+                    Centered layout
+
+                    ☁️ WEATHER API (FREE CALLS)
+
+                    Use Open-Meteo API (no key required):
+
+                    Current Weather:
+                    https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true
+
+                    Forecast (5–7 days):
+                    https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto
+
+                    Geocoding (optional, for default city coordinates):
+                    https://geocoding-api.open-meteo.com/v1/search?name={city}
+
+                    📁 PROJECT STRUCTURE
+                    src/
+                    ├── assets/
+                    │ └── icons/ # Optional custom icons
+                    ├── components/
+                    │ ├── WeatherCard.tsx # Main current weather card
+                    │ ├── ForecastCard.tsx # Daily forecast cards
+                    │ ├── Loader.tsx # Skeleton / spinner
+                    │ ├── ErrorMessage.tsx # Error overlay
+                    │ ├── SettingsModal.tsx # °C/°F toggle, dark mode
+                    │ └── Header.tsx # App logo & optional theme toggle
+                    ├── context/
+                    │ └── WeatherContext.tsx # Global state: weather + unit + dark mode
+                    ├── hooks/
+                    │ ├── useWeather.ts # Core weather fetching logic
+                    │ └── useLocalStorage.ts # Store unit & theme preferences
+                    ├── services/
+                    │ └── weatherService.ts # API calls: current + forecast
+                    ├── types/
+                    │ └── weather.ts # Strong TS interfaces
+                    ├── utils/
+                    │ └── weatherCodes.ts # Map Open-Meteo codes → Lucide icons
+                    ├── App.tsx
+                    └── main.tsx
+                    🔧 FEATURES REQUIRED
+
+                    Fetch weather for a default city on load
+
+                    Detect user location via navigator.geolocation (optional)
+
+                    Show:
+
+                    Temperature
+
+                    Wind speed
+
+                    Weather condition
+
+                    Max / Min temperature
+
+                    Display 5–7 day forecast
+
+                    Loading skeleton / spinner
+
+                    Error state handling
+
+                    Fully responsive
+
+                    Clean TypeScript interfaces
+
+                    Custom reusable components only
+
+                    🌤 ICON LOGIC
+
+                    Map Open-Meteo weather codes → weather types:
+
+                    Sunny → Sun
+
+                    Cloudy → Cloud
+
+                    Rainy → CloudRain
+
+                    Thunderstorm → CloudLightning
+
+                    Snow → CloudSnow
+
+                    🧠 LOGIC RULES
+
+                    Use async/await + try/catch
+
+                    Proper error handling
+
+                    Separate service layer (weatherService.ts)
+
+                    No fetching directly in components
+
+                    Use custom hook (useWeather)
+
+                    Strong TypeScript types, no any
+
+                    Use environment variables if needed
+
+                    Avoid unnecessary re-renders
+
+                    🎯 BONUS
+
+                    Temperature unit toggle (°C / °F)
+
+                    Animated background gradient shift
+
+                    Dark mode toggle
+
+                    Skeleton loading animation
+
+                    Premium glassmorphism + hover effects
+
+                    🚀 OUTPUT FORMAT
+
+                    Full code files
+
+                    Tailwind config if needed
+
+                    Clear comments
+
+                    Ready to run with:
+
+                    npm install
+                    npm run dev
+
+                    Clean, premium, scalable, production-quality
+
+
+                    2️⃣ Animated Splash Screen
+
+                    Full-page splash screen on app load
+
+                    Smooth fade-in / fade-out animation
+
+                    Centered app logo (512×512)
+
+                    Loading progress indicator (spinner or animated dots)
+
+                    Glassmorphism panel behind logo (semi-transparent, blurred)
+
+                    Optional subtle moving clouds animation in background
+
+                    3️⃣ Multi-Page Structure (3 Pages)
+
+                    Page 1: Home / Dashboard
+
+                    Page 2: Profile / About / Info page
+
+                    Page 3: Settings / Preferences page
+
+                    Requirements for multi-page setup:
+
+                    Use React Router or SPA conditional rendering
+
+                    Simple, fixed navbar at top or bottom with icons only
+
+                    Navbar icons use Lucide React or similar
+
+                    Highlight active page icon
+
+                    Smooth page transitions (fade or slide)
+
+                    4️⃣ Navbar Requirements
+
+                    Minimal & clean
+
+                    Icons only (no text)
+
+                    Hover effect with glow / shadow
+
+                    Fixed position (top or bottom)
+
+                    Optional: glassmorphism background
+
+                    Responsive: collapses nicely on mobile
+
+                    5️⃣ Animated Clouds / Sky Elements
+
+                    Subtle, soft clouds moving horizontally
+
+                    Layered parallax effect for depth
+
+                    Can use SVGs, PNGs, or Tailwind + CSS animation
+
+                    Should not interfere with navbar or content
+                    <button class="copy-btn" onclick="copyText('prompt-architect', this)">
+                        <i data-lucide="copy" size="16"></i> Copy
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Capacitor Guide -->
+        <section id="capacitor">
+            <div class="section-header">
+                <i data-lucide="smartphone"></i>
+                <h2>Capacitor Mobile Setup Guide</h2>
+            </div>
+            <div class="card" style="margin-bottom: 2rem; border-color: var(--primary);">
+                <h3 style="margin-bottom: 1rem;"><i data-lucide="check-circle" size="18"></i> 0. Essential Prerequisites
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 1rem;">
+                        <strong style="color: var(--primary);">Node.js</strong><br>
+                        <span style="font-size: 0.85rem; color: var(--text-dim);">Latest LTS Version (v20+)</span>
+                    </div>
+                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 1rem;">
+                        <strong style="color: var(--primary);">Java JDK</strong><br>
+                        <span style="font-size: 0.85rem; color: var(--text-dim);">OpenJDK 21 (v21.0.8+)</span>
+                    </div>
+                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 1rem;">
+                        <strong style="color: var(--primary);">Android Studio</strong><br>
+                        <span style="font-size: 0.85rem; color: var(--text-dim);">Latest with Android SDK</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="guide-list">
+                    <div class="guide-step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <h3>Install Core Tools</h3>
+                            <p>Ensure you have Java 21 (OpenJDK) and Android Studio installed.</p>
+                            <code>npm install @capacitor/core @capacitor/cli @capacitor/android</code>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <h3>Initialize & Add Android</h3>
+                            <p>Create the config file and add the native folder.</p>
+                            <code>npx cap init "Skyline Weather" "com.munib.skylineweather" --web-dir dist</code>
+                            <code>npx cap add android</code>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <h3>Assets (Icons & Splash)</h3>
+                            <p>Auto-generate all screen sizes using a single 1024x1024 logo.</p>
+                            <code>npm install @capacitor/assets --save-dev</code>
+                            <code>npx capacitor-assets generate --android</code>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <h3>Build & Sync</h3>
+                            <p>Build your web project first, then sync to Android folder.</p>
+                            <code>npm run build</code>
+                            <code>npx cap sync</code>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <h3>Generate APK</h3>
+                            <p>Run via terminal or open Android Studio.</p>
+                            <code>cd android; ./gradlew assembleDebug</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Features Specs -->
+        <section id="specs">
+            <div class="section-header">
+                <i data-lucide="layers"></i>
+                <h2>Modern Feature Specs</h2>
+            </div>
+            <div class="tags">
+                <span class="tag">3 Dynamic Pages</span>
+                <span class="tag">Animated Splash</span>
+                <span class="tag">Glassy Navbar</span>
+                <span class="tag">Parallax Clouds</span>
+                <span class="tag">Location Aware</span>
+                <span class="tag">React Router</span>
+            </div>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem;"><i data-lucide="image"></i> Animated Splash</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Smooth fade-in/out, centered 512px logo,
+                        progress indicator, and blurred panel background.</p>
+                </div>
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem;"><i data-lucide="navigation"></i> Smart Navbar</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Fixed position, icons-only, lucide-react
+                        integration, active state highlighting with glow.</p>
+                </div>
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem;"><i data-lucide="wind"></i> Parallax Clouds</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Tailwind + CSS animations for horizontal
+                        drifting. Multi-layered depth effects.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div style="font-weight: 800; color: #fff; margin-bottom: 0.5rem;">SKYLINE WEATHER</div>
+            <p>Made by Munib Jahangir Dev • Developer Resource Pack 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Copy Function
+        function copyText(id, btn) {
+            const text = document.getElementById(id).innerText.replace(/Copy\s*$/, '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" size="16"></i> Copied!';
+                btn.classList.add('copied');
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('copied');
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>
